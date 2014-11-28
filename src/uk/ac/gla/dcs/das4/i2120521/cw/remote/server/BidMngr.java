@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import uk.ac.gla.dcs.das4.i2120521.cw.remote.BidResult;
 import uk.ac.gla.dcs.das4.i2120521.cw.remote.BidError;
 
 /**

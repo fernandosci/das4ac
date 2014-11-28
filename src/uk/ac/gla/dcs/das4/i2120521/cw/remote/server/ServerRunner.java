@@ -6,7 +6,7 @@
 package uk.ac.gla.dcs.das4.i2120521.cw.remote.server;
 
 import java.rmi.Naming;
-import uk.ac.gla.dcs.das4.i2120521.cw.core.GlobalParameters;
+import uk.ac.gla.dcs.das4.i2120521.cw.remote.GlobalParameters;
 
 /**
  *

@@ -14,10 +14,9 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
-import uk.ac.gla.dcs.das4.i2120521.cw.core.GlobalParameters;
+import uk.ac.gla.dcs.das4.i2120521.cw.remote.GlobalParameters;
 import uk.ac.gla.dcs.das4.i2120521.cw.remote.AuctionOverNotificationEvent;
 import uk.ac.gla.dcs.das4.i2120521.cw.remote.BidError;
-import uk.ac.gla.dcs.das4.i2120521.cw.remote.BidResult;
 
 /**
  *

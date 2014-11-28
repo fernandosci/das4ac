@@ -5,14 +5,18 @@
  */
 package uk.ac.gla.dcs.das4.i2120521.cw.remote;
 
-import java.rmi.Remote;
+import java.util.Calendar;
 
 /**
  *
  * @author ito
  */
-public interface TransactionMngr extends Remote{
+public class GlobalParameters {
     
+     public static final String servername = "AuctionServer";
+    public static final int port = 0;
     
+    public static int purgeUnit = Calendar.MINUTE;
+    public static int purgeValue = 1;
     
 }

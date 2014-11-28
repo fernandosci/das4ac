@@ -5,11 +5,8 @@
  */
 package uk.ac.gla.dcs.das4.i2120521.cw.remote.server;
 
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
-import java.rmi.server.UnicastRemoteObject;
+import java.rmi.Naming;
 import uk.ac.gla.dcs.das4.i2120521.cw.core.GlobalParameters;
-import uk.ac.gla.dcs.das4.i2120521.cw.remote.AuctionServer;
 
 /**
  *
@@ -24,9 +21,8 @@ public class ServerRunner {
         try {
             String name = GlobalParameters.servername;
             AuctionServerImpl srv = new AuctionServerImpl();
-            AuctionServer stub = (AuctionServer) UnicastRemoteObject.exportObject(srv, GlobalParameters.port);
-            Registry registry = LocateRegistry.getRegistry();
-            registry.rebind(name, stub);
+            srv.initialize();
+            Naming.bind(name, srv);
             System.out.println(name + " bound");
         } catch (Exception e) {
             System.err.println("ServerRunner exception: " + e);

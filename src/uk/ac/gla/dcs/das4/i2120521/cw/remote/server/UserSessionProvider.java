@@ -11,6 +11,6 @@ package uk.ac.gla.dcs.das4.i2120521.cw.remote.server;
  */
 public interface UserSessionProvider {
     
-    RemoteSessionImpl getUserSession(String username);
+    RemoteSessionImpl getUserSession(String username) throws Exception;
     
 }

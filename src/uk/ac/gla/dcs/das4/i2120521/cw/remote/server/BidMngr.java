@@ -35,6 +35,7 @@ public class BidMngr {
         this.closed = false;
         currentBid = -1;
         currentWinner = null;
+        result = null;
     }
 
     public synchronized BidResult close() {
@@ -47,21 +48,24 @@ public class BidMngr {
 
     public synchronized BidError bid(String username, double value) {
         if (!closed) {
-            if (value > minimumValue && value > currentBid && username.equals(owner)) {
+            if (value > minimumValue && value > currentBid) {
 
-                currentBid = value;
-                currentWinner = username;
-                if (!bidders.contains(username)) {
-                    bidders.add(username);
+                if (!username.equals(owner)) {
+                    currentBid = value;
+                    currentWinner = username;
+                    if (!bidders.contains(username)) {
+                        bidders.add(username);
+                    }
+                    bids.add(new BidInfo(username, value));
+
+                    return BidError.NONE;
+                } else {
+                    return BidError.OWNERBID;
                 }
-                bids.add(new BidInfo(username, value));
-
-                return BidError.NONE;
 
             } else {
                 return BidError.LOWVALUE;
             }
-
         } else {
             return BidError.CLOSED;
         }

@@ -7,20 +7,28 @@ package uk.ac.gla.dcs.das4.i2120521.cw.remote;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.rmi.server.UID;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 /**
  *
  * @author ito
  */
-public interface RemoteSession extends Remote{
-    
+public interface RemoteSession extends Remote {
+
     String getUsername() throws RemoteException;
-    
-    List<AuctionItem> getAvailableAuctionItems() throws RemoteException;
-    
-    AuctionItem newAuction(String name, double minimumValue, Date closingDate) throws RemoteException;
-    
-    BidResult bid(double value, TransactionMngr wallet) throws RemoteException;
+
+    Set<UID> getAvailableAuctionItems() throws RemoteException;
+
+    Set<UID> getLegacyAuctionItems() throws RemoteException;
+
+    Set<UID> getAllAuctionItems() throws RemoteException;
+
+    UID newAuction(String name, double minimumValue, Date closingDate) throws RemoteException;
+
+    public BidError bid(UID auctionItemId, double value) throws RemoteException;
+
+    AuctionItemInfo getAuctionItemInfoProvider() throws RemoteException;
+
 }

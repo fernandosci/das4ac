@@ -10,6 +10,6 @@ package uk.ac.gla.dcs.das4.i2120521.cw.remote;
  * @author ito
  */
 public enum BidError {
-    CLOSED, LOWVALUE, NONE
+    CLOSED, LOWVALUE, NOTFOUND, OWNERBID, NONE
     
 }

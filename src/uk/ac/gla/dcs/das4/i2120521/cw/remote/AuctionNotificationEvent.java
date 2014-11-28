@@ -5,20 +5,22 @@
  */
 package uk.ac.gla.dcs.das4.i2120521.cw.remote;
 
+import java.rmi.server.UID;
+
 /**
  *
  * @author ito
  */
 public abstract class AuctionNotificationEvent {
 
-    private final AuctionItem item;
+    private final UID id;
 
-    public AuctionNotificationEvent(AuctionItem item) {
-        this.item = item;
+    public AuctionNotificationEvent(UID id) {
+        this.id = id;
     }
 
-    public AuctionItem getItem() {
-        return item;
+    public UID getID() {
+        return id;
     }
 
 }

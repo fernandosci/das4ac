@@ -20,25 +20,41 @@ public class AuctionServerImpl extends UnicastRemoteObject implements AuctionSer
 
     private final HashMap<String, RemoteSessionImpl> usersessions;
 
-    private final AuctionMngr aucMngr;
+    private AuctionMngr aucMngr;
+
+    private AuctionItemInfoImpl aucItemInfo;
+
+    private boolean initialized;
 
     public AuctionServerImpl() throws RemoteException {
         super();
 
         usersessions = new HashMap<>();
-        aucMngr = new AuctionMngr(this);
+        initialized = false;
+    }
+
+    public void initialize() throws RemoteException {
+        if (!initialized) {
+            initialized = true;
+            aucMngr = new AuctionMngr(this);
+            aucItemInfo = new AuctionItemInfoImpl(aucMngr);
+        }
     }
 
     @Override
     public RemoteSession login(String username, AuctionNotificationListener listener) throws RemoteException {
 
+        if (!initialized) {
+            throw new RemoteException("SERVERN NOT INITIALIZED");
+        }
+
         synchronized (usersessions) {
             if (!usersessions.containsKey(username)) {
 
-                RemoteSessionImpl session = new RemoteSessionImpl(username, aucMngr, listener);
+                RemoteSessionImpl session = new RemoteSessionImpl(username, aucMngr, aucItemInfo, listener);
 
                 usersessions.put(username, session);
-                //TODO - instantiate new session return it
+
                 return session;
 
             } else {
@@ -49,7 +65,10 @@ public class AuctionServerImpl extends UnicastRemoteObject implements AuctionSer
     }
 
     @Override
-    public RemoteSessionImpl getUserSession(String username) {
+    public RemoteSessionImpl getUserSession(String username) throws Exception {
+        if (!initialized) {
+            throw new Exception("SERVERN NOT INITIALIZED");
+        }
         synchronized (usersessions) {
             return usersessions.get(username);
         }

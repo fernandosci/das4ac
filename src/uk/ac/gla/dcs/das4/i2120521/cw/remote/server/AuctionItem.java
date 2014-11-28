@@ -7,13 +7,11 @@ package uk.ac.gla.dcs.das4.i2120521.cw.remote.server;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UID;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicBoolean;
-import uk.ac.gla.dcs.das4.i2120521.cw.remote.AuctionItem;
 
-public class AuctionItemImpl extends UnicastRemoteObject implements AuctionItem {
+public class AuctionItem {
 
     private final String owner;
     private final String name;
@@ -25,7 +23,7 @@ public class AuctionItemImpl extends UnicastRemoteObject implements AuctionItem 
 
     private final AtomicBoolean purge;
 
-    protected AuctionItemImpl(String owner, String name, double minimumValue, Date closingDate) throws RemoteException {
+    protected AuctionItem(String owner, String name, double minimumValue, Date closingDate) throws RemoteException {
         super();
         this.owner = owner;
         this.id = new UID();
@@ -35,57 +33,47 @@ public class AuctionItemImpl extends UnicastRemoteObject implements AuctionItem 
         this.closingDate = closingDate;
 
         purge = new AtomicBoolean(false);
-        
 
         bidMngr = new BidMngr(minimumValue, owner);
     }
 
-    public BidMngr getBidMngr() {
+    protected BidMngr getBidMngr() {
         return bidMngr;
     }
 
-    @Override
     public UID getId() {
         return id;
     }
 
-    @Override
     public String getOwner() {
         return owner;
     }
 
-    @Override
     public String getName() {
         return name;
     }
 
-    @Override
     public double getMinimumValue() {
         return minimumValue;
     }
 
-    @Override
-    public Date getClosingDate() throws RemoteException {
-        return closingDate;
+    public Date getClosingDate() {
+        return (Date) closingDate.clone();
     }
 
-    @Override
-    public Date getOpeningDate() throws RemoteException {
-        return openingDate;
+    public Date getOpeningDate() {
+        return (Date) openingDate.clone();
     }
 
-    @Override
-    public boolean isOver() throws RemoteException {
+    public boolean isOver() {
         return bidMngr.isClosed();
     }
 
-    @Override
-    public String getCurrentWinner() throws RemoteException {
+    public String getCurrentWinner() {
         return bidMngr.getCurrentWinner();
     }
 
-    @Override
-    public boolean isPriceMet() throws RemoteException {
+    public boolean isPriceMet() {
         return bidMngr.isPriceMet();
     }
 

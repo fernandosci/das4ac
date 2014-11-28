@@ -6,14 +6,15 @@
 package uk.ac.gla.dcs.das4.i2120521.cw.remote.server;
 
 import java.rmi.RemoteException;
+import java.rmi.server.UID;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
-import uk.ac.gla.dcs.das4.i2120521.cw.remote.AuctionItem;
+import java.util.Set;
+import uk.ac.gla.dcs.das4.i2120521.cw.remote.AuctionItemInfo;
 import uk.ac.gla.dcs.das4.i2120521.cw.remote.AuctionNotificationListener;
-import uk.ac.gla.dcs.das4.i2120521.cw.remote.BidResult;
+import uk.ac.gla.dcs.das4.i2120521.cw.remote.BidError;
 import uk.ac.gla.dcs.das4.i2120521.cw.remote.RemoteSession;
-import uk.ac.gla.dcs.das4.i2120521.cw.remote.TransactionMngr;
 
 /**
  *
@@ -21,15 +22,17 @@ import uk.ac.gla.dcs.das4.i2120521.cw.remote.TransactionMngr;
  */
 public class RemoteSessionImpl extends UnicastRemoteObject implements RemoteSession {
 
-    private String username;
-    private AuctionMngr aucMngr;
-    private AuctionNotificationListener listener;
+    private final String username;
+    private final AuctionMngr aucMngr;
+    private final AuctionNotificationListener listener;
+    private final AuctionItemInfoImpl aucItemInfo;
 
-    public RemoteSessionImpl(String username, AuctionMngr aucMngr, AuctionNotificationListener listener) throws RemoteException {
-
+    RemoteSessionImpl(String username, AuctionMngr aucMngr, AuctionItemInfoImpl aucItemInfo, AuctionNotificationListener listener) throws RemoteException {
+        super();
         this.username = username;
         this.aucMngr = aucMngr;
         this.listener = listener;
+        this.aucItemInfo = aucItemInfo;
     }
 
     protected AuctionNotificationListener getUserListener() {
@@ -37,23 +40,38 @@ public class RemoteSessionImpl extends UnicastRemoteObject implements RemoteSess
     }
 
     @Override
-    public List<AuctionItem> getAvailableAuctionItems() throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public AuctionItem newAuction(String name, double minimumValue, Date closingDate) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public String getUsername() throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return username;
     }
 
     @Override
-    public BidResult bid(double value, TransactionMngr wallet) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Set<UID> getAvailableAuctionItems() throws RemoteException {
+        return aucMngr.getAvailableAuctionItems();
+    }
+
+    @Override
+    public Set<UID> getLegacyAuctionItems() throws RemoteException {
+        return aucMngr.getLegacyAuctionItems();
+    }
+
+    @Override
+    public Set<UID> getAllAuctionItems() throws RemoteException {
+        return aucMngr.getAllAuctionItems();
+    }
+
+    @Override
+    public UID newAuction(String name, double minimumValue, Date closingDate) throws RemoteException {        
+        return aucMngr.newAuction(username, name, minimumValue, closingDate);
+    }
+
+    @Override
+    public BidError bid(UID auctionItemId, double value) throws RemoteException {
+        return aucMngr.bid(username, auctionItemId, value);
+    }
+
+    @Override
+    public AuctionItemInfo getAuctionItemInfoProvider() throws RemoteException {
+        return aucItemInfo;
     }
 
 }

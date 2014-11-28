@@ -5,6 +5,8 @@
  */
 package uk.ac.gla.dcs.das4.i2120521.cw.remote;
 
+import java.rmi.server.UID;
+
 /**
  *
  * @author ito
@@ -15,40 +17,47 @@ public class AuctionOverNotificationEvent extends AuctionNotificationEvent {
     private final boolean isOwn;
     private final boolean isWinner;
     private final String winner;
+    private final double winningbid;
 
-    public static AuctionOverNotificationEvent notWinner(String winner, AuctionItem item) {
-        return new AuctionOverNotificationEvent(winner != null, false, false, winner, item);
+    public static AuctionOverNotificationEvent notWinner(String winner, double winningbid, UID id) {
+        return new AuctionOverNotificationEvent(winner != null, false, false, winner, winningbid, id);
     }
 
-    public static AuctionOverNotificationEvent winner(String winner, AuctionItem item) {
-        return new AuctionOverNotificationEvent(true, false, true, winner, item);
+    public static AuctionOverNotificationEvent winner(String winner, double winningbid, UID id) {
+        return new AuctionOverNotificationEvent(true, false, true, winner, winningbid, id);
     }
 
-    public static AuctionOverNotificationEvent owner(String winner, AuctionItem item) {
-        return new AuctionOverNotificationEvent(winner != null, true, false, winner, item);
+    public static AuctionOverNotificationEvent owner(String winner, double winningbid, UID id) {
+        return new AuctionOverNotificationEvent(winner != null, true, false, winner, winningbid, id);
     }
 
-    public AuctionOverNotificationEvent(boolean priceMet, boolean isOwn, boolean isWinner, String winner, AuctionItem item) {
-        super(item);
+    public AuctionOverNotificationEvent(boolean priceMet, boolean isOwn, boolean isWinner, String winner, double winningbid, UID id) {
+        super(id);
         this.priceMet = priceMet;
         this.isOwn = isOwn;
         this.isWinner = isWinner;
         this.winner = winner;
+        this.winningbid = winningbid;
     }
 
     public boolean isPriceMet() {
         return priceMet;
     }
 
-    public boolean isIsOwn() {
+    public boolean isOwn() {
         return isOwn;
     }
 
-    public boolean isIsWinner() {
+    public boolean isWinner() {
         return isWinner;
     }
 
     public String getWinner() {
         return winner;
     }
+
+    public double getWinningbid() {
+        return winningbid;
+    }
+
 }

@@ -31,6 +31,7 @@ public class BidMngr {
 
     BidMngr(double minimumValue, String owner) {
         this.minimumValue = minimumValue;
+        this.owner = owner;
         this.closed = false;
         currentBid = -1;
         currentWinner = null;

@@ -17,6 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.GlobalParameters;
 import uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.AuctionOverNotificationEvent;
 import uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.BidError;
+import uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.Log;
 
 /**
  *
@@ -78,6 +79,7 @@ public class AuctionMngr {
         allAuctionItems.put(item.getId(), item);
         activeAuctionItems.put(item.getId(), item);
 
+         Log.LogMessage(this.getClass(), String.format("New Auction::: USERNAME->%s\tNAME->%s\tMVALUE->%f\tClosingDate->%s ", username, name, minimumValue, closingDate.toString()));
         new Timer(true).schedule(new TaskerClose(item.getId()), closingDate);
 
         return item.getId();

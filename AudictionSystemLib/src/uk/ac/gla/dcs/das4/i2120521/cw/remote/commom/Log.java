@@ -5,14 +5,18 @@
  */
 package uk.ac.gla.dcs.das4.i2120521.cw.remote.commom;
 
-import java.rmi.Remote;
-import java.rmi.RemoteException;
-
 /**
  *
  * @author ito
  */
-public interface AuctionNotificationListener extends Remote {
-
-    void auctionOverNotification(AuctionOverNotificationEvent event) throws RemoteException;
+public class Log {
+    
+    public static boolean enable = true;
+    
+    public static void LogMessage(Class cl, String msg)
+    {
+        if (enable)
+            System.out.println(String.format("%s: %s", cl.getSimpleName(),msg));
+    }
+    
 }

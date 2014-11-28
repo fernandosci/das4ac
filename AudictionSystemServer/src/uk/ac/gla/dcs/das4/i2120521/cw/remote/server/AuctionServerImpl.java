@@ -10,6 +10,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
 import uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.AuctionNotificationListener;
 import uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.AuctionServer;
+import uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.Log;
 import uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.RemoteSession;
 
 /**
@@ -53,6 +54,10 @@ public class AuctionServerImpl extends UnicastRemoteObject implements AuctionSer
 
                 RemoteSessionImpl session = new RemoteSessionImpl(username, aucMngr, aucItemInfo, listener);
 
+                System.out.println();
+                
+                Log.LogMessage(this.getClass(), "New client Connected: " + username);
+                
                 usersessions.put(username, session);
 
                 return session;

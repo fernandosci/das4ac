@@ -5,13 +5,14 @@
  */
 package uk.ac.gla.dcs.das4.i2120521.cw.remote.commom;
 
+import java.io.Serializable;
 import java.rmi.server.UID;
 
 /**
  *
  * @author ito
  */
-public abstract class AuctionNotificationEvent {
+public abstract class AuctionNotificationEvent implements Serializable{
 
     private final UID id;
 

@@ -13,20 +13,20 @@ export SRCPATH=uk/ac/gla/dcs/das4/i2120521/cw/remote
 export PATHCLASS=tmp/class
 export PATHBUILD=tmp/build
 
-mkdir $PATHCLASS
-mkdir $PATHBUILD
+#mkdir $PATHCLASS
+#mkdir $PATHBUILD
 
-echo COMPILING .JAVA
-find -name "*.java" > sources.txt
-javac $PATHCLASS -d @sources.txt
+#echo COMPILING .JAVA
+#find -name "*.java" > sources.txt
+#javac $PATHCLASS -d @sources.txt
 
 
-cd $PATHCLASS
+#cd $PATHCLASS
 
-echo BUILDING $JAR
-jar cvf ../../$PATHBUILD/$JAR $SRCPATH/commom/*.class $SRCPATH/server/*.class $SRCPATH/client/*.class
+#echo BUILDING $JAR
+#jar cvf ../../$PATHBUILD/$JAR $SRCPATH/commom/*.class $SRCPATH/server/*.class $SRCPATH/client/*.class
 
-cd ../..
+#cd ../..
 
 echo RUNNING SERVER
 java -cp $MYPATH1/$PATHBUILD/$JAR -Djava.rmi.server.codebase=file:/$MYPATH1/$PATHBUILD/$JAR -Djava.security.policy=$MYPATH1/security.policy uk.ac.gla.dcs.das4.i2120521.cw.remote.server.ServerRunner

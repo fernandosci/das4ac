@@ -13,8 +13,10 @@ import java.util.Calendar;
  */
 public class GlobalParameters {
     
-     public static final String servername = "AuctionServer";
+    public static final String servername = "AuctionServer";
     public static final int port = 0;
+    
+    public static final int regPort = 1099;
     
     public static int purgeUnit = Calendar.MINUTE;
     public static int purgeValue = 1;

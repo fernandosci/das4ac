@@ -1,6 +1,6 @@
 #!/bin/sh
 
-rm -d -f -R tmp
+rm -r -f tmp
 
 export MYPATH1=`pwd`
 

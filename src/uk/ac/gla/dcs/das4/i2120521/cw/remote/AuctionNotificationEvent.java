@@ -5,12 +5,20 @@
  */
 package uk.ac.gla.dcs.das4.i2120521.cw.remote;
 
-import uk.ac.gla.dcs.das4.i2120521.cw.core.LocalAuctionItem;
-
 /**
  *
  * @author ito
  */
-public abstract class AuctionNotificationEvent{
-    private LocalAuctionItem item;
+public abstract class AuctionNotificationEvent {
+
+    private final AuctionItem item;
+
+    public AuctionNotificationEvent(AuctionItem item) {
+        this.item = item;
+    }
+
+    public AuctionItem getItem() {
+        return item;
+    }
+
 }

@@ -27,4 +27,10 @@ public interface AuctionItem extends Remote {
     public Date getClosingDate() throws RemoteException;
 
     public UID getId() throws RemoteException;
+    
+    public boolean isOver() throws RemoteException;
+    
+    public String getCurrentWinner() throws RemoteException;
+    
+    public boolean isPriceMet() throws RemoteException;
 }

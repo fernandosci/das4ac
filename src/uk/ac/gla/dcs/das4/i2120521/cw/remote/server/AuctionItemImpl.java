@@ -10,8 +10,8 @@ import java.rmi.server.UID;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicBoolean;
 import uk.ac.gla.dcs.das4.i2120521.cw.remote.AuctionItem;
-import uk.ac.gla.dcs.das4.i2120521.cw.remote.BidError;
 
 public class AuctionItemImpl extends UnicastRemoteObject implements AuctionItem {
 
@@ -23,6 +23,8 @@ public class AuctionItemImpl extends UnicastRemoteObject implements AuctionItem 
     private final UID id;
     private final BidMngr bidMngr;
 
+    private final AtomicBoolean purge;
+
     protected AuctionItemImpl(String owner, String name, double minimumValue, Date closingDate) throws RemoteException {
         super();
         this.owner = owner;
@@ -31,6 +33,9 @@ public class AuctionItemImpl extends UnicastRemoteObject implements AuctionItem 
         this.minimumValue = minimumValue;
         this.openingDate = Calendar.getInstance().getTime();
         this.closingDate = closingDate;
+
+        purge = new AtomicBoolean(false);
+        
 
         bidMngr = new BidMngr(minimumValue, owner);
     }
@@ -68,4 +73,32 @@ public class AuctionItemImpl extends UnicastRemoteObject implements AuctionItem 
     public Date getOpeningDate() throws RemoteException {
         return openingDate;
     }
+
+    @Override
+    public boolean isOver() throws RemoteException {
+        return bidMngr.isClosed();
+    }
+
+    @Override
+    public String getCurrentWinner() throws RemoteException {
+        return bidMngr.getCurrentWinner();
+    }
+
+    @Override
+    public boolean isPriceMet() throws RemoteException {
+        return bidMngr.isPriceMet();
+    }
+
+    public boolean isPurged() {
+        synchronized (purge) {
+            return purge.get();
+        }
+    }
+
+    public void purge() {
+        synchronized (purge) {
+            purge.set(true);
+        }
+    }
+
 }

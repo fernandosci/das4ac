@@ -5,6 +5,9 @@
  */
 package uk.ac.gla.dcs.das4.i2120521.cw.remote;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  *
  * @author ito
@@ -15,12 +18,14 @@ public class BidResult {
     private final String winner;
     private final String owner;
     private final double value;
+    private final Set<String> bidders;
 
-    public BidResult(String owner, boolean priceMet, String winner, double value) {
+    public BidResult(String owner, boolean priceMet, String winner, double value, Set<String> bidders) {
         this.priceMet = priceMet;
         this.winner = winner;
         this.owner = owner;
         this.value = value;
+        this.bidders = new HashSet<>(bidders);
     }
 
     public boolean isPriceMet() {
@@ -37,6 +42,10 @@ public class BidResult {
 
     public double getValue() {
         return value;
+    }
+
+    public Set<String> getBidders() {
+        return new HashSet<>(bidders);
     }
 
 }

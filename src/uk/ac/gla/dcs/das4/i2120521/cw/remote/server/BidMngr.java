@@ -18,30 +18,34 @@ import uk.ac.gla.dcs.das4.i2120521.cw.remote.BidError;
  */
 public class BidMngr {
 
-    String owner;
-    double minimumValue;
+    private String owner;
+    private final double minimumValue;
 
-    double currentBid;
-    String currentWinner;
+    private double currentBid;
+    private String currentWinner;
 
-    boolean closed;
+    private boolean closed;
+    private BidResult result;
 
     Set<String> bidders = new HashSet<>();
-    List<uservalue> bids = new ArrayList<>();
+    List<BidInfo> bids = new ArrayList<>();
 
     BidMngr(double minimumValue, String owner) {
         this.minimumValue = minimumValue;
         this.closed = false;
         currentBid = -1;
-        currentWinner = "";
+        currentWinner = null;
     }
 
-    synchronized BidResult close() {
-        closed = true;
-        return new BidResult(owner, (currentBid > minimumValue), currentWinner, currentBid);
+    public synchronized BidResult close() {
+        if (!closed) {
+            closed = true;
+            result = new BidResult(owner, (currentBid > minimumValue), currentWinner, currentBid, bidders);
+        }
+        return result;
     }
 
-    synchronized BidError bid(String username, double value) {
+    public synchronized BidError bid(String username, double value) {
         if (!closed) {
             if (value > minimumValue && value > currentBid && username.equals(owner)) {
 
@@ -50,7 +54,7 @@ public class BidMngr {
                 if (!bidders.contains(username)) {
                     bidders.add(username);
                 }
-                bids.add(new uservalue(username, value));
+                bids.add(new BidInfo(username, value));
 
                 return BidError.NONE;
 
@@ -63,32 +67,16 @@ public class BidMngr {
         }
     }
 
-    class uservalue {
+    public synchronized boolean isClosed() {
+        return closed;
+    }
 
-        String username;
-        Double value;
+    public synchronized boolean isPriceMet() {
+        return (currentBid > minimumValue);
+    }
 
-        public uservalue(String username, Double value) {
-            this.username = username;
-            this.value = value;
-        }
-
-        public String getUsername() {
-            return username;
-        }
-
-        public void setUsername(String username) {
-            this.username = username;
-        }
-
-        public Double getValue() {
-            return value;
-        }
-
-        public void setValue(Double value) {
-            this.value = value;
-        }
-
+    public synchronized String getCurrentWinner() {
+        return currentWinner;
     }
 
 }

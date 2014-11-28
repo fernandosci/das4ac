@@ -5,7 +5,6 @@
  */
 package uk.ac.gla.dcs.das4.i2120521.cw.remote.server;
 
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UID;
 import java.util.ArrayList;
@@ -13,13 +12,13 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import uk.ac.gla.dcs.das4.i2120521.cw.core.GlobalParameters;
 import uk.ac.gla.dcs.das4.i2120521.cw.remote.AuctionItem;
+import uk.ac.gla.dcs.das4.i2120521.cw.remote.AuctionOverNotificationEvent;
 import uk.ac.gla.dcs.das4.i2120521.cw.remote.BidResult;
 
 /**
@@ -29,13 +28,14 @@ import uk.ac.gla.dcs.das4.i2120521.cw.remote.BidResult;
 public class AuctionMngr {
 
     private final ConcurrentHashMap<UID, AuctionItem> activeAuctionItems;
-
     private final ConcurrentHashMap<UID, AuctionItem> legacyAuctionItems;
+    private final UserSessionProvider usProvider;
 
-    public AuctionMngr() {
+    public AuctionMngr(UserSessionProvider usProvider) {
 
         activeAuctionItems = new ConcurrentHashMap<>();
         legacyAuctionItems = new ConcurrentHashMap<>();
+        this.usProvider = usProvider;
     }
 
     public List<AuctionItem> getAvailableAuctionItems() {
@@ -75,8 +75,8 @@ public class AuctionMngr {
                 BidResult bidResult = i.getBidMngr().close();
 
                 legacyAuctionItems.put(i.getId(), i);
-
                 configureNextTimer();
+                notifyBidders(bidResult);
             }
         }
 
@@ -84,6 +84,31 @@ public class AuctionMngr {
             Calendar cal = Calendar.getInstance();
             cal.add(GlobalParameters.purgeUnit, GlobalParameters.purgeValue);
             new Timer(true).schedule(new TaskerPurge(i), cal.getTime());
+        }
+
+        private void notifyBidders(BidResult bidResults) {
+            //TODO
+            Set<String> bidders = bidResults.getBidders();
+
+            RemoteSessionImpl userSession = usProvider.getUserSession(bidResults.getOwner());
+            if (userSession != null) {
+                userSession.getUserListener().auctionOverNotification(AuctionOverNotificationEvent.owner(bidResults.getWinner(), i));
+            }
+
+            if (bidResults.isPriceMet()) {
+                bidders.remove(bidResults.getWinner());
+                userSession = usProvider.getUserSession(bidResults.getWinner());
+                if (userSession != null) {
+                    userSession.getUserListener().auctionOverNotification(AuctionOverNotificationEvent.winner(bidResults.getWinner(), i));
+                }
+            }
+
+            for (String b : bidders) {
+                userSession = usProvider.getUserSession(b);
+                if (userSession != null) {
+                    userSession.getUserListener().auctionOverNotification(AuctionOverNotificationEvent.notWinner(bidResults.getWinner(), i));
+                }
+            }
         }
     }
 
@@ -97,7 +122,9 @@ public class AuctionMngr {
 
         @Override
         public void run() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            legacyAuctionItems.remove(i.getId());
+
+            i.purge();
         }
 
     }

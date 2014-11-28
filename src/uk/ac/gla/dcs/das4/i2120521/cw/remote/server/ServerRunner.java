@@ -22,14 +22,14 @@ public class ServerRunner {
             System.setSecurityManager(new SecurityManager());
         }
         try {
-            String name = "AuctionServer";
+            String name = GlobalParameters.servername;
             AuctionServerImpl srv = new AuctionServerImpl();
             AuctionServer stub = (AuctionServer) UnicastRemoteObject.exportObject(srv, GlobalParameters.port);
             Registry registry = LocateRegistry.getRegistry();
             registry.rebind(name, stub);
-            System.out.println("AuctionServer bound");
+            System.out.println(name + " bound");
         } catch (Exception e) {
-            System.err.println("AuctionServer exception: " + e);
+            System.err.println("ServerRunner exception: " + e);
         }
     }
 }

@@ -3,14 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package uk.ac.gla.dcs.das4.i2120521.cw.core;
+package uk.ac.gla.dcs.das4.i2120521.cw.remote.server;
 
 /**
  *
  * @author ito
  */
-public class WalletTransactionResult {
-    private final boolean accepted;
+public interface UserSessionProvider {
     
+    RemoteSessionImpl getUserSession(String username);
     
 }

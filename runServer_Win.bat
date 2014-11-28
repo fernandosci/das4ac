@@ -1,6 +1,6 @@
 @echo off
 
-del /f tmp
+del /f /q tmp
 
 REM src\uk\ac\gla\dcs\das4\i2120521\cw\remote
 SET MYPATH=%~dp0
@@ -15,7 +15,7 @@ SET SRCPATH=uk\ac\gla\dcs\das4\i2120521\cw\remote
 SET PATHCLASS=tmp\class
 SET PATHBUILD=tmp\build
 
-mkdir %PATHCLASS%s
+mkdir %PATHCLASS%
 mkdir %PATHBUILD%
 
 echo COMPILING .JAVA
@@ -33,17 +33,5 @@ cd ..\..
 echo RUNNING SERVER
 java -cp %MYPATH1%\%PATHBUILD%\%JAR% -Djava.rmi.server.codebase=file:/%MYPATH1%\%PATHBUILD%\%JAR% -Djava.security.policy=%MYPATH1%\security.policy uk.ac.gla.dcs.das4.i2120521.cw.remote.server.ServerRunner
 
-REM echo BUILDING libAuction.jar
-REM javac -cp %pathbuild%\libAuction.jar tmp\class\%srcpath%\client\*.class
-
-
-REM find -name "*.java" > sources.txt
-REM $ javac @sources.txt
-
-
-REM del -f tmp
-
-REM 
-REM echo %mypath:~0,-1%
 
 del sources.txt

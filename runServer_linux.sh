@@ -1,46 +1,34 @@
-@echo off
+#!/bin/sh
 
+rm -d -f -R tmp
 
-REM src\uk\ac\gla\dcs\das4\i2120521\cw\remote
-SET mypath=%~dp0
-SET mypath1=%mypath:~0,-1%
+export MYPATH1=`pwd`
 
-SET server=AudictionSystemServer
-SET client=AudictionSystemClient
-SET lib=AudictionSystemLib
+export SERVER=AudictionSystemServer
+export CLIENT=AudictionSystemClient
+export LIB=AudictionSystemLib
+export JAR=AuctionSystem.jar
 
-echo %mypath%
-echo %mypath1%
+export SRCPATH=uk/ac/gla/dcs/das4/i2120521/cw/remote
+export PATHCLASS=tmp/class
+export PATHBUILD=tmp/build
 
-SET srcpath=src\uk\ac\gla\dcs\das4\i2120521\cw\remote
-SET pathclass=tmp\class
-SET pathbuild=tmp\build
-
-mkdir %pathclass%\src
-mkdir %pathbuild%
+mkdir $PATHCLASS
+mkdir $PATHBUILD
 
 echo COMPILING .JAVA
-dir /s /B *.java > sources.txt
-
-javac -d %pathclass%\src @sources.txt
-
-echo BUILDING libAuction.jar
-jar cvf %pathbuild%\libAuction.jar tmp\class\%srcpath%\commom\*.class
-
-echo BUILDING ServerRunner.jar
-javac -cp "%mypath1%\%pathbuild%\libAuction.jar" "tmp\class\%srcpath%\server\ServerRunner.class"
-
-REM echo BUILDING libAuction.jar
-REM javac -cp %pathbuild%\libAuction.jar tmp\class\%srcpath%\client\*.class
+find -name "*.java" > sources.txt
+javac $PATHCLASS -d @sources.txt
 
 
-REM find -name "*.java" > sources.txt
-REM $ javac @sources.txt
+cd $PATHCLASS
 
+echo BUILDING $JAR
+jar cvf ../../$PATHBUILD/$JAR $SRCPATH/commom/*.class $SRCPATH/server/*.class $SRCPATH/client/*.class
 
-REM del -f tmp
+cd ../..
 
-REM 
-REM echo %mypath:~0,-1%
+echo RUNNING SERVER
+java -cp $MYPATH1/$PATHBUILD/$JAR -Djava.rmi.server.codebase=file:/$MYPATH1/$PATHBUILD/$JAR -Djava.security.policy=$MYPATH1/security.policy uk.ac.gla.dcs.das4.i2120521.cw.remote.server.ServerRunner
 
-del sources.txt
+rm sources.txt

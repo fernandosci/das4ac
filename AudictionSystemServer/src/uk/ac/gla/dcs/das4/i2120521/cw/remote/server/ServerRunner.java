@@ -5,7 +5,8 @@
  */
 package uk.ac.gla.dcs.das4.i2120521.cw.remote.server;
 
-import java.rmi.Naming;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.GlobalParameters;
 
 /**
@@ -18,11 +19,16 @@ public class ServerRunner {
         if (System.getSecurityManager() == null) {
             System.setSecurityManager(new SecurityManager());
         }
+        
         try {
             String name = GlobalParameters.servername;
             AuctionServerImpl srv = new AuctionServerImpl();
             srv.initialize();
-            Naming.bind(name, srv);
+            
+            LocateRegistry.createRegistry(1099);
+            Registry registry = LocateRegistry.getRegistry();            
+            registry.rebind(name, srv);
+            //Naming.bind(name, srv);
             System.out.println(name + " bound");
         } catch (Exception e) {
             System.err.println("ServerRunner exception: " + e);

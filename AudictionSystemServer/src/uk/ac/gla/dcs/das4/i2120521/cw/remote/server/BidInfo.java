@@ -5,11 +5,13 @@
  */
 package uk.ac.gla.dcs.das4.i2120521.cw.remote.server;
 
+import java.io.Serializable;
+
 /**
  *
  * @author ito
  */
-public class BidInfo {
+public class BidInfo implements Serializable{
     String username;
     Double value;
 

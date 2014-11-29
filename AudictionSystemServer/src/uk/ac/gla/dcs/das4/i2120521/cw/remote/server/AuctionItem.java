@@ -5,13 +5,14 @@
  */
 package uk.ac.gla.dcs.das4.i2120521.cw.remote.server;
 
-import java.rmi.RemoteException;
+import java.io.IOException;
+import java.io.Serializable;
 import java.rmi.server.UID;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class AuctionItem {
+public class AuctionItem implements Serializable {
 
     private final String owner;
     private final String name;
@@ -23,8 +24,7 @@ public class AuctionItem {
 
     private final AtomicBoolean purge;
 
-    protected AuctionItem(String owner, String name, double minimumValue, Date closingDate) throws RemoteException {
-        super();
+    protected AuctionItem(String owner, String name, double minimumValue, Date closingDate) {
         this.owner = owner;
         this.id = new UID();
         this.name = name;
@@ -37,7 +37,7 @@ public class AuctionItem {
         bidMngr = new BidMngr(minimumValue, owner);
     }
 
-    protected BidMngr getBidMngr() {
+    public BidMngr getBidMngr() {
         return bidMngr;
     }
 
@@ -88,5 +88,6 @@ public class AuctionItem {
             purge.set(true);
         }
     }
+    
 
 }

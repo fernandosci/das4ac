@@ -12,7 +12,9 @@ import java.rmi.RemoteException;
  *
  * @author ito
  */
-public interface AuctionNotificationListener extends Remote {
+public interface ClientListener extends Remote {
 
     void auctionOverNotification(AuctionOverNotificationEvent event) throws RemoteException;
+
+    boolean isAlive() throws RemoteException;
 }

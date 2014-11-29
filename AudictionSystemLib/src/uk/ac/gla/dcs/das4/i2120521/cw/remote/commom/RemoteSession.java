@@ -30,5 +30,7 @@ public interface RemoteSession extends Remote {
     public BidError bid(UID auctionItemId, double value) throws RemoteException;
 
     AuctionItemInfo getAuctionItemInfoProvider() throws RemoteException;
+    
+    void logoff() throws RemoteException;
 
 }

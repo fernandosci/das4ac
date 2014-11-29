@@ -5,6 +5,7 @@
  */
 package uk.ac.gla.dcs.das4.i2120521.cw.remote.server;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -15,9 +16,9 @@ import uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.BidError;
  *
  * @author ito
  */
-public class BidMngr {
+public class BidMngr implements Serializable{
 
-    private String owner;
+    private final String owner;
     private final double minimumValue;
 
     private double currentBid;
@@ -58,7 +59,7 @@ public class BidMngr {
                     }
                     bids.add(new BidInfo(username, value));
 
-                    return BidError.NONE;
+                    return BidError.SUCCESSFUL;
                 } else {
                     return BidError.OWNERBID;
                 }
@@ -81,6 +82,11 @@ public class BidMngr {
 
     public synchronized String getCurrentWinner() {
         return currentWinner;
+    }
+    
+    public synchronized double getCurrentBid()
+    {
+        return currentBid;
     }
 
 }

@@ -5,6 +5,7 @@
  */
 package uk.ac.gla.dcs.das4.i2120521.cw.remote.server;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,7 +13,7 @@ import java.util.Set;
  *
  * @author ito
  */
-public class BidResult {
+public class BidResult implements Serializable{
 
     private final boolean priceMet;
     private final String winner;

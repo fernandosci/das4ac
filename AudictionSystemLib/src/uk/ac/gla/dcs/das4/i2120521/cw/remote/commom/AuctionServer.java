@@ -14,5 +14,5 @@ import java.rmi.RemoteException;
  */
 public interface AuctionServer extends Remote {
 
-    RemoteSession login(String username, AuctionNotificationListener listener) throws RemoteException;
+    RemoteSession login(String username, ClientListener listener) throws RemoteException;
 }

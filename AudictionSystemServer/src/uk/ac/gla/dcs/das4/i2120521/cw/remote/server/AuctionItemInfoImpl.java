@@ -92,4 +92,13 @@ public class AuctionItemInfoImpl extends UnicastRemoteObject implements AuctionI
         return auctionItem.isPriceMet();
     }
 
+    @Override
+    public double getCurrentBid(UID uid) throws RemoteException {
+        AuctionItem auctionItem = mngr.getAuctionItem(uid);
+        if (auctionItem == null) {
+            throw new RemoteException("UID NOT FOUND.");
+        }
+        return auctionItem.getBidMngr().getCurrentBid();
+    }
+
 }

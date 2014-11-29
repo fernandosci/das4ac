@@ -21,6 +21,8 @@ public interface AuctionItemInfo extends Remote {
     public String getName(UID uid) throws RemoteException;
 
     public double getMinimumValue(UID uid) throws RemoteException;
+    
+    public double getCurrentBid(UID uid) throws RemoteException;
 
     public Date getOpeningDate(UID uid) throws RemoteException;
 

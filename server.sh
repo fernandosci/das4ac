@@ -1,7 +1,7 @@
 export MYPATH1=`pwd`
-export SERVER="AudictionSystemServer"
-export CLIENT="AudictionSystemClient"
-export LIB="AudictionSystemLib"
+export SERVER="AuctionSystemServer"
+export CLIENT="AuctionSystemClient"
+export LIB="AuctionSystemLib"
 
 
 export SRCPATH="uk/ac/gla/dcs/das4/i2120521/cw/remote"

@@ -27,8 +27,8 @@ public class BidMngr implements Serializable{
     private boolean closed;
     private BidResult result;
 
-    Set<String> bidders = new HashSet<>();
-    List<BidInfo> bids = new ArrayList<>();
+    Set<String> bidders = new HashSet<String>();
+    List<BidInfo> bids = new ArrayList<BidInfo>();
 
     BidMngr(double minimumValue, String owner) {
         this.minimumValue = minimumValue;

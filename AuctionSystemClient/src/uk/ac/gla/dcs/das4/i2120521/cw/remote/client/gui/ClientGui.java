@@ -47,8 +47,8 @@ public class ClientGui extends javax.swing.JFrame {
         this.server = server;
         this.session = null;
 
-        auctionItemsModel = new DefaultListModel<>();
-        jListAuctions = new JList<>(auctionItemsModel);
+        auctionItemsModel = new DefaultListModel<Itemss>();
+        jListAuctions = new JList<Itemss>(auctionItemsModel);
 
         jListAuctions.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jListAuctions.setDoubleBuffered(true);

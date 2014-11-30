@@ -26,7 +26,7 @@ public class BidResult implements Serializable{
         this.winner = winner;
         this.owner = owner;
         this.value = value;
-        this.bidders = new HashSet<>(bidders);
+        this.bidders = new HashSet<String>(bidders);
     }
 
     public boolean isPriceMet() {
@@ -46,7 +46,7 @@ public class BidResult implements Serializable{
     }
 
     public Set<String> getBidders() {
-        return new HashSet<>(bidders);
+        return new HashSet<String>(bidders);
     }
 
 }

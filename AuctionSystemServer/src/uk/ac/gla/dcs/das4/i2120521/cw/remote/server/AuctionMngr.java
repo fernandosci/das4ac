@@ -41,9 +41,9 @@ public class AuctionMngr {
 
     public AuctionMngr(UserSessionProvider usProvider) {
 
-        activeAuctionItems = new ConcurrentHashMap<>();
-        legacyAuctionItems = new ConcurrentHashMap<>();
-        allAuctionItems = new ConcurrentHashMap<>();
+        activeAuctionItems = new ConcurrentHashMap<UID, AuctionItem>();
+        legacyAuctionItems = new ConcurrentHashMap<UID, AuctionItem>();
+        allAuctionItems = new ConcurrentHashMap<UID, AuctionItem>();
         this.usProvider = usProvider;
     }
 
@@ -53,7 +53,7 @@ public class AuctionMngr {
 
     public Set<UID> getAvailableAuctionItems() {
 
-        Set<UID> set = new HashSet<>();
+        Set<UID> set = new HashSet<UID>();
 
         set.addAll(activeAuctionItems.keySet());
 
@@ -62,7 +62,7 @@ public class AuctionMngr {
 
     public Set<UID> getLegacyAuctionItems() {
 
-        Set<UID> set = new HashSet<>();
+        Set<UID> set = new HashSet<UID>();
 
         set.addAll(legacyAuctionItems.keySet());
 
@@ -70,7 +70,7 @@ public class AuctionMngr {
     }
 
     public Set<UID> getAllAuctionItems() {
-        Set<UID> set = new HashSet<>();
+        Set<UID> set = new HashSet<UID>();
 
         set.addAll(allAuctionItems.keySet());
 
@@ -130,60 +130,69 @@ public class AuctionMngr {
             throw new Exception("No auctions!");
         }
 
-        try (FileOutputStream f = new FileOutputStream(filename); ObjectOutput s = new ObjectOutputStream(f)) {
+        FileOutputStream f = new FileOutputStream(filename);
+        ObjectOutput s = new ObjectOutputStream(f);
 
-            s.writeInt(values.size());
+        s.writeInt(values.size());
 
-            Calendar inst = Calendar.getInstance();
-            Date timenow = inst.getTime();
-            s.writeObject(timenow);
+        Calendar inst = Calendar.getInstance();
+        Date timenow = inst.getTime();
+        s.writeObject(timenow);
 
-            for (AuctionItem i : values) {
-                s.writeObject(i);
-            }
-
-            s.flush();
+        for (AuctionItem i : values) {
+            s.writeObject(i);
         }
+
+        s.flush();
+        s.close();
+        f.close();
+
     }
 
     public void importAuctions(String filename) throws FileNotFoundException, IOException, ClassNotFoundException, Exception {
 
-        try (FileInputStream in = new FileInputStream(filename); ObjectInputStream s = new ObjectInputStream(in)) {
+        FileInputStream in = new FileInputStream(filename);
+        ObjectInputStream s = new ObjectInputStream(in);
 
-            Calendar inst = Calendar.getInstance();
-            Date timenow = inst.getTime();
+        Calendar inst = Calendar.getInstance();
+        Date timenow = inst.getTime();
 
-            int nauc = s.readInt();
+        int nauc = s.readInt();
 
-            Date past = (Date) s.readObject();
-            long msDiff = timenow.getTime() - past.getTime();
+        Date past = (Date) s.readObject();
+        long msDiff = timenow.getTime() - past.getTime();
 
-            if (msDiff < 0) {
-                throw new Exception("File created in the future!");
-            }
-
-            List<AuctionItem> l = new ArrayList<>();
-
-            for (int c = 0; c < nauc; c++) {
-                AuctionItem i = (AuctionItem) s.readObject();
-
-                Date openingDate = i.getOpeningDate();
-                openingDate.setTime(openingDate.getTime() + msDiff);
-                i.setOpeningDate(openingDate);
-                Date closingDate = i.getClosingDate();
-                closingDate.setTime(closingDate.getTime() + msDiff);
-                i.setClosingDate(closingDate);
-                Date deleteDate = i.getDeleteDate();
-                deleteDate.setTime(deleteDate.getTime() + msDiff);
-                i.setDeleteDate(deleteDate);
-
-                Log.LogMessage(this.getClass(), String.format("New Auction Imported::: USERNAME->%s\tNAME->%s\tMVALUE->%f\tClosingDate->%s ", i.getOwner(), i.getName(), i.getMinimumValue(), i.getClosingDate().toString()));
-                l.add(i);
-            }
-            for (AuctionItem i : l) {
-                handleNewItem(i);
-            }
+        if (msDiff < 0) {
+            s.close();
+            in.close();
+            throw new Exception("File created in the future!");
         }
+
+        List<AuctionItem> l = new ArrayList<AuctionItem>();
+
+        for (int c = 0; c < nauc; c++) {
+            AuctionItem i = (AuctionItem) s.readObject();
+
+            Date openingDate = i.getOpeningDate();
+            openingDate.setTime(openingDate.getTime() + msDiff);
+            i.setOpeningDate(openingDate);
+            Date closingDate = i.getClosingDate();
+            closingDate.setTime(closingDate.getTime() + msDiff);
+            i.setClosingDate(closingDate);
+            Date deleteDate = i.getDeleteDate();
+            deleteDate.setTime(deleteDate.getTime() + msDiff);
+            i.setDeleteDate(deleteDate);
+
+            Log.LogMessage(this.getClass(), String.format("New Auction Imported::: USERNAME->%s\tNAME->%s\tMVALUE->%f\tClosingDate->%s ", i.getOwner(), i.getName(), i.getMinimumValue(), i.getClosingDate().toString()));
+            l.add(i);
+        }
+        for (AuctionItem i : l) {
+            handleNewItem(i);
+        }
+
+        s.close();
+        in.close();
+
     }
 
     class TaskerClose extends TimerTask {

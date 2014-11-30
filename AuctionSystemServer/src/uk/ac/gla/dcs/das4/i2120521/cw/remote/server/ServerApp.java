@@ -18,9 +18,6 @@ import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
-import uk.ac.gla.dcs.das4.i2120521.cw.remote.server.AuctionMngr;
-import uk.ac.gla.dcs.das4.i2120521.cw.remote.server.AuctionServerImpl;
-import uk.ac.gla.dcs.das4.i2120521.cw.remote.server.RemoteSessionImpl;
 
 /**
  *
@@ -48,11 +45,11 @@ public class ServerApp extends javax.swing.JFrame {
     public ServerApp(AuctionServerImpl server, AuctionMngr mngr) {
         initComponents();
 
-        activeItemsModel = new DefaultListModel<>();
-        jListActive = new JList<>(activeItemsModel);
+        activeItemsModel = new DefaultListModel<VisAuctionItem>();
+        jListActive = new JList<VisAuctionItem>(activeItemsModel);
 
-        closedItemsModel = new DefaultListModel<>();
-        jListClosed = new JList<>(closedItemsModel);
+        closedItemsModel = new DefaultListModel<VisAuctionItem>();
+        jListClosed = new JList<VisAuctionItem>(closedItemsModel);
 
         jListActive.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jListActive.setDoubleBuffered(true);
@@ -65,9 +62,9 @@ public class ServerApp extends javax.swing.JFrame {
         this.mngr = mngr;
         this.server =  server;
 
-        allItems = new HashMap<>();
-        activeItems = new HashMap<>();
-        closedItems = new HashMap<>();
+        allItems = new HashMap<UID, VisAuctionItem>();
+        activeItems = new HashMap<UID, VisAuctionItem>();
+        closedItems = new HashMap<UID, VisAuctionItem>();
 
         t = new Timer(1, new Updater());
         t.start();
@@ -92,7 +89,7 @@ public class ServerApp extends javax.swing.JFrame {
             synchronized (activeItems) {
 
                 Collection<VisAuctionItem> values = activeItems.values();
-                List<UID> toRemoveFromActive = new ArrayList<>();
+                List<UID> toRemoveFromActive = new ArrayList<UID>();
                 for (VisAuctionItem vis : values) {
                     if (!availableAuctionItems.contains(vis.getItem().getId())) {
                         toRemoveFromActive.add(vis.getItem().getId());
@@ -100,7 +97,7 @@ public class ServerApp extends javax.swing.JFrame {
                 }
 
                 values = closedItems.values();
-                List<UID> toRemoveFromClosed = new ArrayList<>();
+                List<UID> toRemoveFromClosed = new ArrayList<UID>();
                 for (VisAuctionItem vis : values) {
                     if (!closedAuctionItems.contains(vis.getItem().getId())) {
                         toRemoveFromClosed.add(vis.getItem().getId());
@@ -108,7 +105,7 @@ public class ServerApp extends javax.swing.JFrame {
                 }
 
                 values = allItems.values();
-                List<UID> toRemoveFromAll = new ArrayList<>();
+                List<UID> toRemoveFromAll = new ArrayList<UID>();
                 for (VisAuctionItem vis : values) {
                     if (!allAuctionItems.contains(vis.getItem().getId())) {
                         toRemoveFromAll.add(vis.getItem().getId());

@@ -39,7 +39,7 @@ public class AuctionServerImpl extends UnicastRemoteObject implements AuctionSer
     public AuctionServerImpl() throws RemoteException {
         super();
 
-        usersessions = new HashMap<>();
+        usersessions = new HashMap<String, RemoteSessionImpl>();
         initialized = false;
     }
 
@@ -101,7 +101,7 @@ public class AuctionServerImpl extends UnicastRemoteObject implements AuctionSer
 
             values = usersessions.values();
         }
-        return new ArrayList<>(values);
+        return new ArrayList<RemoteSessionImpl>(values);
     }
 
     @Override
@@ -132,7 +132,7 @@ public class AuctionServerImpl extends UnicastRemoteObject implements AuctionSer
                 values = usersessions.values();
             }
 
-            Set<String> toRemove = new HashSet<>();
+            Set<String> toRemove = new HashSet<String>();
 
             for (RemoteSessionImpl rs : values) {
 

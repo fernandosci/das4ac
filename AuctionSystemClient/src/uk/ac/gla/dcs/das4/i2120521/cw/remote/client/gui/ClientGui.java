@@ -33,8 +33,8 @@ public class ClientGui extends javax.swing.JFrame {
 
     private boolean open = true;
 
-    JList<Itemss> jListAuctions;
-    DefaultListModel<Itemss> auctionItemsModel;
+    JList jListAuctions;
+    DefaultListModel auctionItemsModel;
 
     /**
      * Creates new form ServerApp
@@ -47,8 +47,8 @@ public class ClientGui extends javax.swing.JFrame {
         this.server = server;
         this.session = null;
 
-        auctionItemsModel = new DefaultListModel<Itemss>();
-        jListAuctions = new JList<Itemss>(auctionItemsModel);
+        auctionItemsModel = new DefaultListModel();
+        jListAuctions = new JList(auctionItemsModel);
 
         jListAuctions.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jListAuctions.setDoubleBuffered(true);
@@ -395,14 +395,14 @@ public class ClientGui extends javax.swing.JFrame {
     }//GEN-LAST:event_jBtnShowClosedActionPerformed
 
     private void jBtnBidActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnBidActionPerformed
-        List<Itemss> selectedValuesList = jListAuctions.getSelectedValuesList();
+        Itemss selectedValue = (Itemss)jListAuctions.getSelectedValue();
 
-        if (selectedValuesList.size() != 1) {
+        if (selectedValue == null) {
             JOptionPane.showMessageDialog(this, "Select one!");
         } else {
 
             try {
-                BidError bid = session.bid(selectedValuesList.get(0).uid, Double.parseDouble(jTxtBidValue.getText()));
+                BidError bid = session.bid(selectedValue.uid, Double.parseDouble(jTxtBidValue.getText()));
                 jBtnShowAvailableActionPerformed(null);
                 JOptionPane.showMessageDialog(this, "BID RESULT: " + bid.toString());
 

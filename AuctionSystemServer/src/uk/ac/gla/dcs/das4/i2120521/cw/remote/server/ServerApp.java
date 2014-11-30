@@ -31,25 +31,27 @@ public class ServerApp extends javax.swing.JFrame {
 
     final HashMap<UID, VisAuctionItem> allItems;
 
-    JList<VisAuctionItem> jListActive;
+    JList jListActive;
     final HashMap<UID, VisAuctionItem> activeItems;
-    DefaultListModel<VisAuctionItem> activeItemsModel;
+    DefaultListModel activeItemsModel;
 
-    JList<VisAuctionItem> jListClosed;
+    JList jListClosed;
     final HashMap<UID, VisAuctionItem> closedItems;
-    DefaultListModel<VisAuctionItem> closedItemsModel;
+    DefaultListModel closedItemsModel;
 
     /**
      * Creates new form ServerApp
+     * @param server
+     * @param mngr
      */
     public ServerApp(AuctionServerImpl server, AuctionMngr mngr) {
         initComponents();
 
-        activeItemsModel = new DefaultListModel<VisAuctionItem>();
-        jListActive = new JList<VisAuctionItem>(activeItemsModel);
+        activeItemsModel = new DefaultListModel();
+        jListActive = new JList(activeItemsModel);
 
-        closedItemsModel = new DefaultListModel<VisAuctionItem>();
-        jListClosed = new JList<VisAuctionItem>(closedItemsModel);
+        closedItemsModel = new DefaultListModel();
+        jListClosed = new JList(closedItemsModel);
 
         jListActive.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jListActive.setDoubleBuffered(true);

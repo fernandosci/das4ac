@@ -8,6 +8,7 @@ package uk.ac.gla.dcs.das4.i2120521.cw.remote.client;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import uk.ac.gla.dcs.das4.i2120521.cw.remote.client.gui.ClientGui;
 import uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.AuctionServer;
 import uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.GlobalParameters;
 
@@ -30,12 +31,12 @@ public class ClientRunner {
             }
             Registry registry = LocateRegistry.getRegistry(GlobalParameters.regPort);
             AuctionServer server = (AuctionServer) registry.lookup(name);
-            
-//            ClientGui gui = new ClientGui(server);
-//            gui.setVisible(true);
 
-            Client c = new Client(server, "ClientName");
-            c.run();
+            ClientGui gui = new ClientGui(server);
+            gui.setVisible(true);
+            Client c;
+//            c = new Client(server, "ClientName");
+//            c.run();
         } catch (Exception e) {
             System.err.println("ClientRunner: Failed to connect. " + e);
 

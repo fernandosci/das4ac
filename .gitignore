@@ -17,3 +17,6 @@ hs_err_pid*
 /AuctionSystemLib/dist/
 /AuctionSystemClient/build/
 /AuctionSystemServer/nbproject/private/
+/AuctionSystemServer/dist/
+/AuctionSystemServer/build/
+/AuctionSystemClient/dist/

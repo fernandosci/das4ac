@@ -21,18 +21,18 @@ cd $LIB
 find $MYPATH1/$LIB -name *.java > ../$LIB"sources.txt"
 cd ..
 javac -d $MYPATH1/$PATHCLASS/$LIB @$LIB"sources.txt"
-cd $LIB/src
+cd $PATHCLASS/$LIB
 jar cf $MYPATH1/$PATHBUILD/$LIB".jar" uk
-cd ../..
+cd $MYPATH1
 
 echo COMPILING SERVER
 cd $SERVER
 find $MYPATH1/$SERVER -name *.java > ../$SERVER"sources.txt"
 cd ..
 javac -d $MYPATH1/$PATHCLASS/$SERVER -cp $MYPATH1/$PATHBUILD/$LIB".jar" @$SERVER"sources.txt"
-cd $SERVER/src
+cd $PATHCLASS/$SERVER
 jar cf $MYPATH1/$PATHBUILD/$SERVER".jar" uk
-cd ../..
+cd $MYPATH1
 
 
 
@@ -41,9 +41,9 @@ cd $CLIENT
 find $MYPATH1/$CLIENT -name *.java > ../$CLIENT"sources.txt"
 cd ..
 javac -d $MYPATH1/$PATHCLASS/$CLIENT -cp $MYPATH1/$PATHBUILD/$LIB".jar" @$CLIENT"sources.txt"
-cd $CLIENT/src
+cd $PATHCLASS/$CLIENT
 jar cf $MYPATH1/$PATHBUILD/$CLIENT".jar" uk
-cd ../..
+cd $MYPATH1
 
 exit
 

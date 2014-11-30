@@ -49,9 +49,9 @@ public class BidMngr implements Serializable{
 
     public synchronized BidError bid(String username, double value) {
         if (!closed) {
-            if (value > minimumValue && value > currentBid) {
+            if (!username.equals(owner)) {
 
-                if (!username.equals(owner)) {
+                if (value > minimumValue && value > currentBid) {
                     currentBid = value;
                     currentWinner = username;
                     if (!bidders.contains(username)) {
@@ -61,11 +61,11 @@ public class BidMngr implements Serializable{
 
                     return BidError.SUCCESSFUL;
                 } else {
-                    return BidError.OWNERBID;
+                    return BidError.LOWVALUE;
                 }
 
             } else {
-                return BidError.LOWVALUE;
+                return BidError.OWNERBID;
             }
         } else {
             return BidError.CLOSED;

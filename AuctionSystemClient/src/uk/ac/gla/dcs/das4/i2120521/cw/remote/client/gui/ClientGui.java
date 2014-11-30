@@ -9,7 +9,6 @@ import java.rmi.RemoteException;
 import java.rmi.server.UID;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Set;
 import java.util.TimerTask;
 import javax.swing.DefaultListModel;
@@ -40,10 +39,12 @@ public class ClientGui extends javax.swing.JFrame {
      * Creates new form ServerApp
      *
      * @param server
+     * @param username
      */
-    public ClientGui(AuctionServer server) {
+    public ClientGui(AuctionServer server, String username) {
         initComponents();
 
+        this.jTxtUsername.setText(username);
         this.server = server;
         this.session = null;
 
@@ -395,7 +396,7 @@ public class ClientGui extends javax.swing.JFrame {
     }//GEN-LAST:event_jBtnShowClosedActionPerformed
 
     private void jBtnBidActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnBidActionPerformed
-        Itemss selectedValue = (Itemss)jListAuctions.getSelectedValue();
+        Itemss selectedValue = (Itemss) jListAuctions.getSelectedValue();
 
         if (selectedValue == null) {
             JOptionPane.showMessageDialog(this, "Select one!");

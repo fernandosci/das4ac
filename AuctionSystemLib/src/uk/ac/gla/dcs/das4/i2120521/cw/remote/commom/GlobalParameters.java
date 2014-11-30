@@ -21,7 +21,7 @@ public class GlobalParameters {
     public static int purgeUnit = Calendar.SECOND;
     public static int purgeValue = 60;
 
-    public static int failedAliveMAxCount = 3; //times
+    public static int failedAliveMAxCount = 5; //times
 
     public static int sessionCleanoutFreq = 1000; //ms
 

@@ -24,7 +24,6 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
-import uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.GlobalParameters;
 import uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.AuctionOverNotificationEvent;
 import uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.BidError;
 import uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.Log;
@@ -46,15 +45,6 @@ public class AuctionMngr {
         legacyAuctionItems = new ConcurrentHashMap<>();
         allAuctionItems = new ConcurrentHashMap<>();
         this.usProvider = usProvider;
-    }
-
-    public AuctionMngr(UserSessionProvider usProvider, String filename) throws IOException, FileNotFoundException, ClassNotFoundException, Exception {
-        activeAuctionItems = new ConcurrentHashMap<>();
-        legacyAuctionItems = new ConcurrentHashMap<>();
-        allAuctionItems = new ConcurrentHashMap<>();
-        this.usProvider = usProvider;
-
-        importAuctions(filename);
     }
 
     public AuctionItem getAuctionItem(UID id) {

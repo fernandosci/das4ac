@@ -66,6 +66,14 @@ public class AuctionServerImpl extends UnicastRemoteObject implements AuctionSer
         if (!initialized) {
             throw new RemoteException("SERVERN NOT INITIALIZED");
         }
+        
+         if (listener == null) {
+            throw new RemoteException("NULL Listener");
+        }
+         
+         if (username == null || username.isEmpty()) {
+            throw new RemoteException("NULL or Empty username");
+        }
 
         synchronized (usersessions) {
             if (!usersessions.containsKey(username)) {

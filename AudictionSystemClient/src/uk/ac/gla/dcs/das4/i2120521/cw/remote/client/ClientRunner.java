@@ -8,7 +8,6 @@ package uk.ac.gla.dcs.das4.i2120521.cw.remote.client;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import uk.ac.gla.dcs.das4.i2120521.cw.remote.client.gui.ClientGui;
 import uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.AuctionServer;
 import uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.GlobalParameters;
 

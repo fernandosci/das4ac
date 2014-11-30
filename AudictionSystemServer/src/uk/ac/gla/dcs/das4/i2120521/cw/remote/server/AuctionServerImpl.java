@@ -7,10 +7,12 @@ package uk.ac.gla.dcs.das4.i2120521.cw.remote.server;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -83,6 +85,15 @@ public class AuctionServerImpl extends UnicastRemoteObject implements AuctionSer
             }
         }
 
+    }
+
+    protected List<RemoteSessionImpl> getSessions() {
+        Collection<RemoteSessionImpl> values;
+        synchronized (usersessions) {
+
+            values = usersessions.values();
+        }
+        return new ArrayList<>(values);
     }
 
     @Override

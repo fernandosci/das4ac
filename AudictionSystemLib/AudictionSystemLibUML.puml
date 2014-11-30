@@ -1,0 +1,36 @@
+@startuml
+abstract class uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.AuctionNotificationEvent
+class java.rmi.RemoteException
+class java.rmi.server.UID
+class java.util.Calendar
+class java.util.Date
+class java.util.Set
+class uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.AuctionOverNotificationEvent
+class uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.GlobalParameters
+class uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.Log
+enum uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.BidError
+interface java.io.Serializable
+interface java.rmi.Remote
+interface uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.AuctionItemInfo
+interface uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.AuctionNotificationListener
+interface uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.AuctionServer
+interface uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.RemoteSession
+uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.AuctionNotificationEvent ..> java.rmi.server.UID
+uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.AuctionNotificationEvent --|> java.io.Serializable
+uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.AuctionOverNotificationEvent --|> uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.AuctionNotificationEvent
+uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.AuctionOverNotificationEvent ..> java.rmi.server.UID
+uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.GlobalParameters ..> java.util.Calendar
+uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.AuctionItemInfo ..> java.rmi.RemoteException
+uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.AuctionItemInfo ..> java.rmi.server.UID
+uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.AuctionItemInfo ..> java.util.Date
+uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.AuctionItemInfo --|> java.rmi.Remote
+uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.AuctionNotificationListener ..> java.rmi.RemoteException
+uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.AuctionNotificationListener --|> java.rmi.Remote
+uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.AuctionServer ..> java.rmi.RemoteException
+uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.AuctionServer --|> java.rmi.Remote
+uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.RemoteSession ..> java.rmi.RemoteException
+uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.RemoteSession ..> java.rmi.server.UID
+uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.RemoteSession ..> java.util.Date
+uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.RemoteSession ..> java.util.Set
+uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.RemoteSession --|> java.rmi.Remote
+@enduml

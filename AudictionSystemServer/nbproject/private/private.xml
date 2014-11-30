@@ -14,7 +14,8 @@
         <group>
             <file>file:/D:/DEV/workspaces/netbeans/AudictionSystemServer/AudictionSystemServer/src/uk/ac/gla/dcs/das4/i2120521/cw/remote/server/AuctionServerImpl.java</file>
             <file>file:/D:/DEV/workspaces/netbeans/AudictionSystemServer/AudictionSystemServer/src/uk/ac/gla/dcs/das4/i2120521/cw/remote/server/ServerRunner.java</file>
-            <file>file:/D:/DEV/workspaces/netbeans/AudictionSystemServer/AudictionSystemServer/src/uk/ac/gla/dcs/das4/i2120521/cw/remote/server/AuctionMngr.java</file>
+            <file>file:/D:/DEV/workspaces/netbeans/AudictionSystemServer/AudictionSystemServer/src/uk/ac/gla/dcs/das4/i2120521/cw/remote/server/BidInfo.java</file>
+            <file>file:/D:/DEV/workspaces/netbeans/AudictionSystemServer/AudictionSystemServer/src/uk/ac/gla/dcs/das4/i2120521/cw/remote/server/BidResult.java</file>
         </group>
     </open-files>
 </project-private>

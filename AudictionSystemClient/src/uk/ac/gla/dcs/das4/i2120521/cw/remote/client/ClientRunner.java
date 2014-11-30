@@ -32,11 +32,11 @@ public class ClientRunner {
             Registry registry = LocateRegistry.getRegistry(GlobalParameters.regPort);
             AuctionServer server = (AuctionServer) registry.lookup(name);
             
-            ClientGui gui = new ClientGui(server);
-            gui.setVisible(true);
+//            ClientGui gui = new ClientGui(server);
+//            gui.setVisible(true);
 
-//            Client c = new Client(server, "ClientName");
-//            c.run();
+            Client c = new Client(server, "ClientName");
+            c.run();
         } catch (Exception e) {
             System.err.println("ClientRunner: Failed to connect. " + e);
 

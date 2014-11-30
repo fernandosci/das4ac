@@ -5,12 +5,12 @@
  */
 package uk.ac.gla.dcs.das4.i2120521.cw.remote.server;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.rmi.server.UID;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicBoolean;
+import uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.GlobalParameters;
 
 public class AuctionItem implements Serializable {
 
@@ -19,6 +19,7 @@ public class AuctionItem implements Serializable {
     private final double minimumValue;
     private final Date openingDate;
     private final Date closingDate;
+    private final Date deleteDate;
     private final UID id;
     private final BidMngr bidMngr;
 
@@ -31,6 +32,11 @@ public class AuctionItem implements Serializable {
         this.minimumValue = minimumValue;
         this.openingDate = Calendar.getInstance().getTime();
         this.closingDate = closingDate;
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(closingDate);
+        cal.add(GlobalParameters.purgeUnit, GlobalParameters.purgeValue);
+        this.deleteDate = cal.getTime();
 
         purge = new AtomicBoolean(false);
 
@@ -58,11 +64,15 @@ public class AuctionItem implements Serializable {
     }
 
     public Date getClosingDate() {
-        return (Date) closingDate.clone();
+        synchronized (closingDate) {
+            return (Date) closingDate.clone();
+        }
     }
 
     public Date getOpeningDate() {
-        return (Date) openingDate.clone();
+        synchronized (openingDate) {
+            return (Date) openingDate.clone();
+        }
     }
 
     public boolean isOver() {
@@ -83,11 +93,34 @@ public class AuctionItem implements Serializable {
         }
     }
 
-    public void purge() {
+    protected void purge() {
         synchronized (purge) {
             purge.set(true);
         }
     }
-    
+
+    protected void setOpeningDate(Date date) {
+        synchronized (openingDate) {
+            this.openingDate.setTime(date.getTime());
+        }
+    }
+
+    protected void setClosingDate(Date date) {
+        synchronized (closingDate) {
+            this.closingDate.setTime(date.getTime());
+        }
+    }
+
+    protected void setDeleteDate(Date date) {
+        synchronized (deleteDate) {
+            this.deleteDate.setTime(date.getTime());
+        }
+    }
+
+    protected Date getDeleteDate() {
+        synchronized (deleteDate) {
+            return (Date) deleteDate.clone();
+        }
+    }
 
 }

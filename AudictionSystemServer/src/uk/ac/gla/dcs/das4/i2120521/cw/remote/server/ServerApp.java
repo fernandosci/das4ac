@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package uk.ac.gla.dcs.das4.i2120521.cw.remote.server.gui;
+package uk.ac.gla.dcs.das4.i2120521.cw.remote.server;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,6 +19,8 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import uk.ac.gla.dcs.das4.i2120521.cw.remote.server.AuctionMngr;
+import uk.ac.gla.dcs.das4.i2120521.cw.remote.server.AuctionServerImpl;
+import uk.ac.gla.dcs.das4.i2120521.cw.remote.server.RemoteSessionImpl;
 
 /**
  *
@@ -26,6 +28,7 @@ import uk.ac.gla.dcs.das4.i2120521.cw.remote.server.AuctionMngr;
  */
 public class ServerApp extends javax.swing.JFrame {
 
+    AuctionServerImpl server;
     AuctionMngr mngr;
     Timer t;
 
@@ -42,7 +45,7 @@ public class ServerApp extends javax.swing.JFrame {
     /**
      * Creates new form ServerApp
      */
-    public ServerApp(AuctionMngr mngr) {
+    public ServerApp(AuctionServerImpl server, AuctionMngr mngr) {
         initComponents();
 
         activeItemsModel = new DefaultListModel<>();
@@ -60,12 +63,13 @@ public class ServerApp extends javax.swing.JFrame {
         jScrollPane3.setViewportView(jListClosed);
 
         this.mngr = mngr;
+        this.server =  server;
 
         allItems = new HashMap<>();
         activeItems = new HashMap<>();
         closedItems = new HashMap<>();
 
-        t = new Timer(50, new Updater());
+        t = new Timer(1, new Updater());
         t.start();
     }
 
@@ -74,6 +78,12 @@ public class ServerApp extends javax.swing.JFrame {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            List<RemoteSessionImpl> sessions = server.getSessions();
+            jTxtUsers.setText("");
+            for (RemoteSessionImpl i : sessions)
+            {
+                jTxtUsers.append(i.getLocalUsername()+ "\n");
+            }
 
             Set<UID> allAuctionItems = mngr.getAllAuctionItems();
             Set<UID> availableAuctionItems = mngr.getAvailableAuctionItems();
@@ -155,25 +165,21 @@ public class ServerApp extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
-        jTxtFilename = new javax.swing.JTextField();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
+        jPanel4 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTxtUsers = new javax.swing.JTextArea();
+        jPanel3 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jTxtFilename = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jButton1.setText("Save State");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
-        jTxtFilename.setText("auctionstate1.state");
+        setMinimumSize(new java.awt.Dimension(800, 600));
 
         jTabbedPane1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jTabbedPane1.setDoubleBuffered(true);
@@ -188,41 +194,39 @@ public class ServerApp extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Closed Auctions", jPanel2);
 
+        jPanel4.setLayout(new javax.swing.BoxLayout(jPanel4, javax.swing.BoxLayout.LINE_AXIS));
+
+        jTxtUsers.setEditable(false);
+        jTxtUsers.setColumns(20);
+        jTxtUsers.setRows(5);
+        jScrollPane1.setViewportView(jTxtUsers);
+
+        jPanel4.add(jScrollPane1);
+
+        jTabbedPane1.addTab("Users", jPanel4);
+
+        getContentPane().add(jTabbedPane1, java.awt.BorderLayout.CENTER);
+
+        jButton1.setText("Save State");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanel3.add(jButton1);
+
         jButton2.setText("Load State");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
             }
         });
+        jPanel3.add(jButton2);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 874, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTxtFilename, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jTxtFilename, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        jTxtFilename.setText("auctionstate1.state");
+        jPanel3.add(jTxtFilename);
+
+        getContentPane().add(jPanel3, java.awt.BorderLayout.PAGE_START);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -251,6 +255,8 @@ public class ServerApp extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Import failed. " + ex.toString());
             } catch (ClassNotFoundException ex) {
                 JOptionPane.showMessageDialog(this, "Import failed. " + ex.toString());
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Import failed. " + ex.toString());
             }
         }
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -261,9 +267,13 @@ public class ServerApp extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextField jTxtFilename;
+    private javax.swing.JTextArea jTxtUsers;
     // End of variables declaration//GEN-END:variables
 }

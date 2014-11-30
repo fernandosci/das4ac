@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package uk.ac.gla.dcs.das4.i2120521.cw.remote.server.gui;
+package uk.ac.gla.dcs.das4.i2120521.cw.remote.server;
 
 import uk.ac.gla.dcs.das4.i2120521.cw.remote.server.AuctionItem;
 

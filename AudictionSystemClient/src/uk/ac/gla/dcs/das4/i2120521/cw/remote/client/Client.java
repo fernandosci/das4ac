@@ -42,10 +42,10 @@ public class Client extends UnicastRemoteObject implements ClientListener {
 
         int c = 0;
         while (true) {
-            if (c < 15) {
+            if (c < 20) {
                 Calendar cal = Calendar.getInstance();
-                cal.add(Calendar.MINUTE, 2);
-                UID newAuction = session.newAuction("name" + c, 100, cal.getTime());
+                cal.add(Calendar.SECOND, 30);
+                UID newAuction = session.newAuction("auction" + c, 100, cal.getTime());
 
                 if (newAuction != null) {
                     Log.LogMessage(this.getClass(), "Auction Created. ID: " + newAuction.toString());

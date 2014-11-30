@@ -8,7 +8,6 @@ package uk.ac.gla.dcs.das4.i2120521.cw.remote.server;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.GlobalParameters;
-import uk.ac.gla.dcs.das4.i2120521.cw.remote.server.gui.ServerApp;
 
 /**
  *
@@ -55,7 +54,7 @@ public class ServerRunner {
             //Naming.bind(name, srv);
             System.out.println(name + " bound");
 
-            ServerApp sp = new ServerApp(srv.getAuctionMngr());
+            ServerApp sp = new ServerApp(srv, srv.getAuctionMngr());
             sp.setVisible(true);
         } catch (Exception e) {
             System.err.println("ServerRunner exception: " + e);

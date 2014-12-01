@@ -22,7 +22,7 @@ public class ServerRunner {
             System.setSecurityManager(new SecurityManager());
         }
 
-        boolean gui = false;
+        boolean gui = true;
 
         if (args.length > 0) {
             try {
@@ -63,12 +63,13 @@ public class ServerRunner {
                 LocateRegistry.createRegistry(GlobalParameters.regPort);
                 Registry registry = LocateRegistry.getRegistry();
                 registry.rebind(name, srv);
+                System.out.println(name + " bound");
             } catch (RemoteException remoteException) {
 
                 Naming.rebind("name", srv);
             }
 
-            System.out.println(name + " bound");
+            
 
             if (gui) {
                 ServerApp sp = new ServerApp(srv, srv.getAuctionMngr());

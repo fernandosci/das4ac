@@ -60,10 +60,6 @@ public class ClientRunner implements Runnable {
             }
         }
 
-//	export HOST="127.0.0.1"
-//	export USERNAME="user"
-//	export OPT="1"
-//	export N="1"
         try {
             String name = GlobalParameters.servername;
 

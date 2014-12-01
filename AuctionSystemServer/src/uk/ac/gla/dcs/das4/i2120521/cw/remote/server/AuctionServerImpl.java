@@ -66,29 +66,32 @@ public class AuctionServerImpl extends UnicastRemoteObject implements AuctionSer
         if (!initialized) {
             throw new RemoteException("SERVERN NOT INITIALIZED");
         }
-        
-         if (listener == null) {
+
+        if (listener == null) {
             throw new RemoteException("NULL Listener");
         }
-         
-         if (username == null || username.isEmpty()) {
+
+        if (username == null || username.isEmpty()) {
             throw new RemoteException("NULL or Empty username");
         }
 
         synchronized (usersessions) {
-            if (!usersessions.containsKey(username)) {
+            RemoteSessionImpl rsess = usersessions.get(username);
+
+            if (rsess == null || rsess.isLoggedOff()) {
 
                 RemoteSessionImpl session = new RemoteSessionImpl(username, aucMngr, aucItemInfo, listener);
 
                 System.out.println();
 
-                Log.LogMessage(this.getClass(), "New client Connected: " + username);
+                Log.LogMessage(this.getClass(), "New client Connected: " + username + "\tTotal Clients(cached): " + usersessions.keySet().size());
 
                 usersessions.put(username, session);
 
                 return session;
 
             } else {
+                Log.LogMessage(this.getClass(), "Attempt to login with existing username as: " + username);
                 throw new RemoteException("username already in use.");
             }
         }
@@ -97,11 +100,13 @@ public class AuctionServerImpl extends UnicastRemoteObject implements AuctionSer
 
     protected List<RemoteSessionImpl> getSessions() {
         Collection<RemoteSessionImpl> values;
+        ArrayList<RemoteSessionImpl> arrayList;
         synchronized (usersessions) {
 
             values = usersessions.values();
+            arrayList = new ArrayList<RemoteSessionImpl>(values);
         }
-        return new ArrayList<RemoteSessionImpl>(values);
+        return arrayList;
     }
 
     @Override
@@ -117,7 +122,7 @@ public class AuctionServerImpl extends UnicastRemoteObject implements AuctionSer
                 return rsess;
             } else {
                 usersessions.remove(username);
-                Log.LogMessage(this.getClass(), "Cleanning dead session");
+                Log.LogMessage(this.getClass(), "Request to an logged off session. Cleaning up. " + "\tTotal Clients(cached): " + usersessions.keySet().size());
             }
             return null;
         }
@@ -130,33 +135,31 @@ public class AuctionServerImpl extends UnicastRemoteObject implements AuctionSer
             Collection<RemoteSessionImpl> values;
             synchronized (usersessions) {
                 values = usersessions.values();
-            }
 
-            Set<String> toRemove = new HashSet<String>();
+                Set<String> toRemove = new HashSet<String>();
 
-            for (RemoteSessionImpl rs : values) {
+                for (RemoteSessionImpl rs : values) {
 
-                if (!rs.isLoggedOff()) {
-                    try {
-                        if (!rs.getUserListener().isAlive()) {
+                    if (!rs.isLoggedOff()) {
+                        try {
+                            if (!rs.getUserListener().isAlive()) {
+                                rs.incFailedAlive();
+                            } else {
+                                rs.resetFailedAlive();
+                            }
+                        } catch (RemoteException ex) {
                             rs.incFailedAlive();
-                        } else {
-                            rs.resetFailedAlive();
+                        } finally {
+                            if (rs.getFailedAlive() > GlobalParameters.failedAliveMAxCount) {
+                                Log.LogMessage(this.getClass(), rs.getLocalUsername() + " TIMED OUT! -> AUTOMATICALLY LOGGING OFF.");
+                                toRemove.add(rs.getLocalUsername());
+                            }
                         }
-                    } catch (RemoteException ex) {
-                        rs.incFailedAlive();
-                    } finally {
-                        if (rs.getFailedAlive() > GlobalParameters.failedAliveMAxCount) {
-                            toRemove.add(rs.getLocalUsername());
-                            Log.LogMessage(this.getClass(), rs.getLocalUsername() + " TIMED OUT! -> AUTOMATICALLY LOGGING OFF");
-                        }
+                    } else {
+                        toRemove.add(rs.getLocalUsername());
                     }
-                } else {
-                    toRemove.add(rs.getLocalUsername());
                 }
-            }
 
-            synchronized (usersessions) {
                 for (String s : toRemove) {
                     RemoteSessionImpl remove = usersessions.remove(s);
                     if (!remove.isLoggedOff()) {
@@ -165,8 +168,13 @@ public class AuctionServerImpl extends UnicastRemoteObject implements AuctionSer
                         } catch (RemoteException ex) {
                         }
                     }
+                    if (toRemove.size() != 0) {
+                        Log.LogMessage(this.getClass(), " CLEANNED " + toRemove.size() + " SESSIONS" + "\tTotal Clients(chached): " + usersessions.keySet().size());
+                    }
                 }
+
             }
         }
+
     }
 }

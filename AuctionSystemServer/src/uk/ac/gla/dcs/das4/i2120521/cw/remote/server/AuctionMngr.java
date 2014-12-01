@@ -76,7 +76,7 @@ public class AuctionMngr {
         return set;
     }
 
-    public UID newAuction(String username, String name, double minimumValue, Date closingDate){
+    public UID newAuction(String username, String name, double minimumValue, Date closingDate) {
 
         Calendar cal = Calendar.getInstance();
         Date time = cal.getTime();
@@ -100,7 +100,7 @@ public class AuctionMngr {
 
             new Timer(true).schedule(new TaskerClose(item.getId()), item.getClosingDate());
         } else {
-            System.err.println("Dublicated Auction Item found. KEY: " + item.getId().toString());
+            Log.LogMessage(this.getClass(), "Dublicated Auction Item found. KEY: " + item.getId().toString());
         }
 
     }
@@ -111,6 +111,7 @@ public class AuctionMngr {
 
         if (auc != null) {
             BidError biderr = auc.getBidMngr().bid(username, value);
+            Log.LogMessage(this.getClass(), "BID FROM: " + username + "\tValue: " + value + "\tResult: " + biderr.toString() + "\tID: " + auctionItemId.toString());
             return biderr;
         } else {
             AuctionItem auc1 = allAuctionItems.get(auctionItemId);
@@ -123,11 +124,15 @@ public class AuctionMngr {
     }
 
     public void exportAuctions(String filename) throws IOException, Exception {
+        
         Collection<AuctionItem> values = allAuctionItems.values();
 
         if (values.isEmpty()) {
+            Log.LogMessage(this.getClass(), "Export failed. No Auctions!");
             throw new Exception("No auctions!");
         }
+        
+        
 
         FileOutputStream f = new FileOutputStream(filename);
         ObjectOutput s = new ObjectOutputStream(f);
@@ -145,6 +150,8 @@ public class AuctionMngr {
         s.flush();
         s.close();
         f.close();
+        
+        Log.LogMessage(this.getClass(), "Exported " + values.size() + " Auctions to file: " + filename);
 
     }
 
@@ -191,6 +198,8 @@ public class AuctionMngr {
 
         s.close();
         in.close();
+        
+        Log.LogMessage(this.getClass(), "IMPORTED " + nauc + " Auctions from file: " + filename);
 
     }
 
@@ -205,8 +214,10 @@ public class AuctionMngr {
         @Override
         public void run() {
             if (activeAuctionItems.containsKey(id)) {
-
+    
                 AuctionItem item = activeAuctionItems.remove(id);
+                
+                Log.LogMessage(this.getClass(), "Auction is over! ID: " + item.getId().toString());
 
                 BidResult bidResult = item.getBidMngr().close();
 
@@ -215,13 +226,13 @@ public class AuctionMngr {
                 try {
                     notifyBidders(bidResult);
                 } catch (Exception ex) {
-                    System.err.println("notifyBidders exception: " + ex);
+                     Log.LogMessage(this.getClass(), "notifyBidders exception: " + ex);
                 }
 
                 configureNextTimer();
 
             } else {
-                System.err.println("TaskerClose: " + id.toString() + " not found!. Should never reach here!");
+                Log.LogMessage(this.getClass(), id.toString() + " not found!. Should never reach here!");
             }
         }
 
@@ -239,8 +250,9 @@ public class AuctionMngr {
             RemoteSessionImpl userSession = usProvider.getUserSession(bidResults.getOwner());
             if (userSession != null) {
                 userSession.getUserListener().auctionOverNotification(AuctionOverNotificationEvent.owner(bidResults.getWinner(), bidResults.getValue(), id));
+                Log.LogMessage(this.getClass(), "Notified OWNER -> " + bidResults.getOwner());
             } else {
-                System.err.println("notifyBidders: Could not find Owner -> " + bidResults.getOwner());
+                Log.LogMessage(this.getClass(), "Could not find OWNER -> " + bidResults.getOwner());
             }
 
             if (bidResults.isPriceMet()) {
@@ -248,8 +260,9 @@ public class AuctionMngr {
                 userSession = usProvider.getUserSession(bidResults.getWinner());
                 if (userSession != null) {
                     userSession.getUserListener().auctionOverNotification(AuctionOverNotificationEvent.winner(bidResults.getWinner(), bidResults.getValue(), id));
+                    Log.LogMessage(this.getClass(), "Notified WINNER -> " + bidResults.getWinner());
                 } else {
-                    System.err.println("notifyBidders: Could not find winner -> " + bidResults.getWinner());
+                    Log.LogMessage(this.getClass(), "Could not find WINNER -> " + bidResults.getWinner());
                 }
             }
 
@@ -257,8 +270,9 @@ public class AuctionMngr {
                 userSession = usProvider.getUserSession(b);
                 if (userSession != null) {
                     userSession.getUserListener().auctionOverNotification(AuctionOverNotificationEvent.notWinner(bidResults.getWinner(), bidResults.getValue(), id));
+                      Log.LogMessage(this.getClass(), "Notified BIDDER -> " + b);
                 } else {
-                    System.err.println("notifyBidders: Could not find bidder -> " + b);
+                    Log.LogMessage(this.getClass(), "Could not find BIDDER -> " + b);
                 }
             }
         }
@@ -279,13 +293,14 @@ public class AuctionMngr {
             AuctionItem item2 = allAuctionItems.remove(id);
 
             if (item1 == null) {
-                System.err.println("TaskerPurge: Could not find legacy item -> " + id + ". Should never reach HERE!");
+                Log.LogMessage(this.getClass(), "Could not find legacy item -> " + id + ". Should never reach HERE!");
             }
 
             if (item2 == null) {
-                System.err.println("TaskerPurge: Could not find item -> " + id + ". Should never reach HERE!");
+                  Log.LogMessage(this.getClass(), "Could not find item -> " + id + ". Should never reach HERE!");
             } else {
                 item2.purge();
+                Log.LogMessage(this.getClass(), "Permanently removed -> " + id + ". ");
             }
         }
 

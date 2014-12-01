@@ -396,19 +396,23 @@ public class ClientGui extends javax.swing.JFrame {
     }//GEN-LAST:event_jBtnShowClosedActionPerformed
 
     private void jBtnBidActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnBidActionPerformed
-        Itemss selectedValue = (Itemss) jListAuctions.getSelectedValue();
 
-        if (selectedValue == null) {
-            JOptionPane.showMessageDialog(this, "Select one!");
-        } else {
+        Object ob = jListAuctions.getSelectedValue();
+        if (ob instanceof Itemss) {
+            Itemss selectedValue = (Itemss) ob;
 
-            try {
-                BidError bid = session.bid(selectedValue.uid, Double.parseDouble(jTxtBidValue.getText()));
-                jBtnShowAvailableActionPerformed(null);
-                JOptionPane.showMessageDialog(this, "BID RESULT: " + bid.toString());
+            if (selectedValue == null) {
+                JOptionPane.showMessageDialog(this, "Select one!");
+            } else {
 
-            } catch (RemoteException ex) {
-                JOptionPane.showMessageDialog(this, "Failed. (NOT LOGGED IN??)");
+                try {
+                    BidError bid = session.bid(selectedValue.uid, Double.parseDouble(jTxtBidValue.getText()));
+                    jBtnShowAvailableActionPerformed(null);
+                    JOptionPane.showMessageDialog(this, "BID RESULT: " + bid.toString());
+
+                } catch (RemoteException ex) {
+                    JOptionPane.showMessageDialog(this, "Failed. (NOT LOGGED IN??)");
+                }
             }
         }
 

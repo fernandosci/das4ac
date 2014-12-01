@@ -36,7 +36,7 @@ public class ClientRunner implements Runnable {
 
         String host = "127.0.0.1";
         String username = "user";
-        int opt = 1;
+        int opt = 0;
         int times = 1;
 
         if (args.length > 0) {
@@ -67,7 +67,7 @@ public class ClientRunner implements Runnable {
             AuctionServer server = (AuctionServer) registry.lookup(name);
 
             for (int c = 0; c < times; c++) {
-                Thread thread = new Thread(new ClientRunner(opt, server, username + c));
+                Thread thread = new Thread(new ClientRunner(opt, server, username + "_" + c));
                 thread.start();
             }
         } catch (Exception e) {
@@ -78,16 +78,20 @@ public class ClientRunner implements Runnable {
 
     @Override
     public void run() {
+        
+        int timeout = 20;
 
         switch (option) {
-            case 1: {
+            case 0: {
+                //GUI
                 ClientGui gui = new ClientGui(server, user);
                 gui.setVisible(true);
             }
             break;
-            case 2: {
+            case 1: {
+                //LOGIN
                 try {
-                    Client c = new Client(server, user);
+                    Client c = new TestClientLogin(server, user, timeout);
                     c.run();
                 } catch (RemoteException ex) {
                     Log.LogMessage(this.getClass(), ex.toString());
@@ -96,6 +100,55 @@ public class ClientRunner implements Runnable {
                 }
             }
             break;
+            case 2: {
+                //CREATOR
+                try {
+                    Client c = new TestClientCreator(server, user, timeout,10,4);
+                    c.run();
+                } catch (RemoteException ex) {
+                    Log.LogMessage(this.getClass(), ex.toString());
+                } catch (InterruptedException ex) {
+                    Log.LogMessage(this.getClass(), ex.toString());
+                }
+            }
+            break;
+            case 3: {
+                //BIDDER
+                try {
+                    Client c = new TestClientBidder(server, user, timeout);
+                    c.run();
+                } catch (RemoteException ex) {
+                    Log.LogMessage(this.getClass(), ex.toString());
+                } catch (InterruptedException ex) {
+                    Log.LogMessage(this.getClass(), ex.toString());
+                }
+            }
+            break;
+            case 4: {
+                //LISTENER
+                try {
+                    Client c = new TestClientListener(server, user, timeout);
+                    c.run();
+                } catch (RemoteException ex) {
+                    Log.LogMessage(this.getClass(), ex.toString());
+                } catch (InterruptedException ex) {
+                    Log.LogMessage(this.getClass(), ex.toString());
+                }
+            }
+            break;
+            case 5: {
+                //HISTORIAN
+                try {
+                    Client c = new TestClientHistorian(server, user, timeout);
+                    c.run();
+                } catch (RemoteException ex) {
+                    Log.LogMessage(this.getClass(), ex.toString());
+                } catch (InterruptedException ex) {
+                    Log.LogMessage(this.getClass(), ex.toString());
+                }
+            }
+            break;
+
         }
     }
 }

@@ -25,7 +25,7 @@ if [ $# > 3 ]; then
 else
 	export HOST="127.0.0.1"
 	export USERNAME="user"
-	export OPT="1"
+	export OPT="0"
 	export N="1"
 fi
 

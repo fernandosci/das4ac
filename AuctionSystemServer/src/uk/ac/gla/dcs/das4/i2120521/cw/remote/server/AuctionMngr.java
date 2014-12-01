@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
-import java.rmi.RemoteException;
 import java.rmi.server.UID;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -77,7 +76,7 @@ public class AuctionMngr {
         return set;
     }
 
-    public UID newAuction(String username, String name, double minimumValue, Date closingDate) throws RemoteException {
+    public UID newAuction(String username, String name, double minimumValue, Date closingDate){
 
         Calendar cal = Calendar.getInstance();
         Date time = cal.getTime();
@@ -106,7 +105,7 @@ public class AuctionMngr {
 
     }
 
-    public BidError bid(String username, UID auctionItemId, double value) throws RemoteException {
+    public BidError bid(String username, UID auctionItemId, double value) {
 
         AuctionItem auc = activeAuctionItems.get(auctionItemId);
 

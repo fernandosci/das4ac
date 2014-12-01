@@ -21,7 +21,7 @@ import uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.RemoteSession;
 /**
  *
  * @author ito
- */
+*/
 public class RemoteSessionImpl extends UnicastRemoteObject implements RemoteSession {
 
     private final String username;

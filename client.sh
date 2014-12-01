@@ -17,7 +17,7 @@ export CODEBASE="-Djava.rmi.server.codebase=file:/$MYPATH1/$CLIENTJAR"
 export SECURITYCERT="-Djava.security.policy=$MYPATH1/security.policy"
 export TORUN=uk.ac.gla.dcs.das4.i2120521.cw.remote.client.ClientRunner
 
-if [ $# > 1 ]; then
+if [ $# > 3 ]; then
 	export HOST=$1
 	export USERNAME=$2
 	export OPT=$3
@@ -30,7 +30,6 @@ else
 fi
 
 export PARAMS="$HOST $USERNAME $OPT $N"
-
 
 echo RUNNING CLIENT
 java -cp $JAR $CODEBASE  $SECURITYCERT $TORUN $PARAMS

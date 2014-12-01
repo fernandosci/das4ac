@@ -9,6 +9,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UID;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Calendar;
+import java.util.Random;
 import uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.ClientListener;
 import uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.AuctionOverNotificationEvent;
 import uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.AuctionServer;
@@ -39,9 +40,15 @@ public class Client extends UnicastRemoteObject implements ClientListener {
     public void run() throws RemoteException, InterruptedException {
 
         initialize();
+        
+        Random r = new Random();
+        
 
         int c = 0;
         while (true) {
+            
+            double opt = r.nextDouble();
+            
             if (c < 20) {
                 Calendar cal = Calendar.getInstance();
                 cal.add(Calendar.SECOND, 30);
@@ -56,12 +63,7 @@ public class Client extends UnicastRemoteObject implements ClientListener {
 
             Log.LogMessage(this.getClass(), String.valueOf(c));
             c++;
-            Thread.sleep(1000);
-
-            if (c > 50) {
-                session.logoff();
-                return;
-            }
+            Thread.sleep(1);
         }
     }
 

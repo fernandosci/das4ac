@@ -18,7 +18,7 @@ export SECURITYCERT="-Djava.security.policy=$MYPATH1/security.policy"
 export TORUN=uk.ac.gla.dcs.das4.i2120521.cw.remote.server.ServerRunner
 
 
-if [ $# > 1 ]; then
+if [ $# > 3 ]; then
 	export GUI=$1
 	export REMOVESECONDS=$2
 	export FAILEDTIMES=$3

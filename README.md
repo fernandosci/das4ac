@@ -11,15 +11,17 @@ INSTRUCTIONS:
 
 0-ON LINUX
 1-UNZIP  2121521i.zip (if not done yet)
-2-NAVIGATE INTO THE EXTRACTED ROOT FOLDER (WHERE THIS FILE IS LOCATED)
+2-NAVIGATE INTO THE EXTRACTED ROOT FOLDER das4ac-master(WHERE THIS FILE IS LOCATED)
 3-RUN:
 	sh build.sh
+
+4.a-RUN SERVER:
+	sh server.sh
 	
-4.a-RUN CLIENT:
+4.b-RUN CLIENT:
 	sh client.sh
 	
-4.b-RUN SERVER:
-	sh server.sh
+
 	
 ###########################################################
 ###########################################################

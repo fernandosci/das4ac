@@ -7,15 +7,11 @@ package uk.ac.gla.dcs.das4.i2120521.cw.remote.client;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UID;
-import java.util.Calendar;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.AuctionItemInfo;
-import uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.AuctionOverNotificationEvent;
 import uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.AuctionServer;
+import uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.BidError;
 import uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.Log;
-import uk.ac.gla.dcs.das4.i2120521.cw.remote.commom.RemoteSession;
 
 /**
  *
@@ -42,18 +38,21 @@ public class TestClientBidder extends Client {
             AuctionItemInfo info = session.getAuctionItemInfoProvider();
 
             for (UID uid : availableAuctionItems) {
-                double value = info.getMinimumValue(uid);
+                double value = info.getMinimumValue(uid) + 1;
 
                 if (value < info.getCurrentBid(uid)) {
                     value = info.getCurrentBid(uid) + 1;
                 }
 
-                if (!info.getCurrentWinner(uid).equals(username)) {
-                    session.bid(uid, value);
+                String currentWinner = info.getCurrentWinner(uid);
+
+                if (currentWinner == null || !currentWinner.equals(username)) {
+                    BidError bid = session.bid(uid, value);
+                    Log.LogMessage(this.getClass(), "(" + username + ")" + " BID result " + bid.toString());
                 }
             }
 
-            Thread.sleep(500);
+            Thread.sleep(100 + r.nextInt(100));
 
         } catch (RemoteException ex) {
             error(1, username + " " + ex.toString());

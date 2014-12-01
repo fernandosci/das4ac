@@ -79,7 +79,7 @@ public class ClientRunner implements Runnable {
     @Override
     public void run() {
         
-        int timeout = 20;
+        int timeout = 30;
 
         switch (option) {
             case 0: {
@@ -91,7 +91,7 @@ public class ClientRunner implements Runnable {
             case 1: {
                 //LOGIN
                 try {
-                    Client c = new TestClientLogin(server, user, timeout);
+                    Client c = new TestClientLogin(server, user, 20);
                     c.run();
                 } catch (RemoteException ex) {
                     Log.LogMessage(this.getClass(), ex.toString());

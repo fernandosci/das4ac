@@ -3,7 +3,6 @@ export SERVERSH=server.sh
 
 export TEST=1
 
-export SPARAMS="1 60 5 1000"
 
 cd ..
 
@@ -13,5 +12,4 @@ for ((i=0; i<=0; i++)); do
 sleep 5s && xterm -e sh ./client.sh "127.0.0.1 userlogin_$i ${TEST} 1" &
 done
 
-sh ./server.sh $SPARAMS
 

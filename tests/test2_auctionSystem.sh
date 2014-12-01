@@ -3,8 +3,6 @@ export SERVERSH=server.sh
 
 export TEST=1
 
-export SPARAMS="1 4 5 1000"
-
 cd ..
 
 #CREATOR
@@ -23,6 +21,4 @@ sleep 5s && xterm -e sh ./client.sh "127.0.0.1 LISTENER ${TEST} 1" &
 export TEST=5
 sleep 5s && xterm -e sh ./client.sh "127.0.0.1 HISTORIAN ${TEST} 1" &
 
-
-sh ./server.sh $SPARAMS
 
